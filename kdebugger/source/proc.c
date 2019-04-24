@@ -269,25 +269,25 @@ int proc_create_thread(struct proc *p, uint64_t address) {
         }
 
         if (!memcmp(entries[i].name, "libkernel.sprx", 14)) {
-            _scePthreadAttrInit = entries[i].start + 0x12660;
-            _scePthreadAttrSetstacksize = entries[i].start + 0x12680;
-            _scePthreadCreate = entries[i].start + 0x12AA0;
+            _scePthreadAttrInit = entries[i].start + 0x11180;
+            _scePthreadAttrSetstacksize = entries[i].start + 0x111A0;
+            _scePthreadCreate = entries[i].start + 0x115C0;
             _thr_initial = entries[i].start + 0x84C20;
             break;
         }
         if (!memcmp(entries[i].name, "libkernel_web.sprx", 18))
         {
-            _scePthreadAttrInit = entries[i].start + 0x1E730;
-            _scePthreadAttrSetstacksize = entries[i].start + 0xFA80;
-            _scePthreadCreate = entries[i].start + 0x98C0;
-            _thr_initial = entries[i].start + 0x84C20;
+            _scePthreadAttrInit = entries[i].start + 0x11180;
+            _scePthreadAttrSetstacksize = entries[i].start + 0x111A0;
+            _scePthreadCreate = entries[i].start + 0x115C0;
+            _thr_initial = entries[i].start + 0x7CD20;
             break;
         }
         if (!memcmp(entries[i].name, "libkernel_sys.sprx", 18)) {
-            _scePthreadAttrInit = entries[i].start + 0x13190;
-            _scePthreadAttrSetstacksize = entries[i].start + 0x131B0;
-            _scePthreadCreate = entries[i].start + 0x135D0;
-            _thr_initial = entries[i].start + 0x89030;
+            _scePthreadAttrInit = entries[i].start + 0x11CB0;
+            _scePthreadAttrSetstacksize = entries[i].start + 0x11CD0;
+            _scePthreadCreate = entries[i].start + 0x120F0;
+            _thr_initial = entries[i].start + 0x81230;
             break;
         }
     }

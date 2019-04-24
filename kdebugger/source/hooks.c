@@ -399,8 +399,8 @@ int install_hooks() {
 
     // trap_fatal hook
     uint64_t kernbase = get_kbase();
-    memcpy((void *)(kernbase + 0x1718D8), "\x4C\x89\xE7", 3); // mov rdi, r12
-    write_jmp(kernbase + 0x1718DB, (uint64_t)hook_trap_fatal);
+    memcpy((void *)(kernbase + 0x3DCF28), "\x4C\x89\xE7", 3); // mov rdi, r12
+    write_jmp(kernbase + 0x3DCF2B, (uint64_t)hook_trap_fatal);
 
     // proc
     install_syscall(107, sys_proc_list);

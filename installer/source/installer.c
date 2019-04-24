@@ -27,39 +27,39 @@ void patch_kernel() {
     uint64_t kernbase = get_kbase();
 
     // patch memcpy first
-    *(uint8_t *)(kernbase + 0x1EA53D) = 0xEB;
+    *(uint8_t *)(kernbase + 0x149D4D) = 0xEB;
 
     // patch sceSblACMgrIsAllowedSystemLevelDebugging
-    memcpy((void *)(kernbase + 0x11730), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
+    memcpy((void *)(kernbase + 0x169790), "\x31\xC0\x40\xC3", 4);
 
     // patch sceSblACMgrHasMmapSelfCapability
-    memcpy((void *)(kernbase + 0x117B0), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
+    memcpy((void *)(kernbase + 0x169810), "\x31\xC0\x40\xC3", 4);
 
     // patch sceSblACMgrIsAllowedToMmapSelf
-    memcpy((void *)(kernbase + 0x117C0), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
+    memcpy((void *)(kernbase + 0x169820), "\x31\xC0\x40\xC3", 4);
 
     // disable sysdump_perform_dump_on_fatal_trap
     // will continue execution and give more information on crash, such as rip
-    *(uint8_t *)(kernbase + 0x7673E0) = 0xC3;
+    *(uint8_t *)(kernbase + 0x73A6A0) = 0xC3;
 
     // self patches
-    memcpy((void *)(kernbase + 0x13F03F), "\x31\xC0\x90\x90\x90", 5);
+    memcpy((void *)(kernbase + 0x143277), "\x31\xC0\x90\x90\x90", 5);
 
     // patch vm_map_protect check
-    memcpy((void *)(kernbase + 0x1A3C08), "\x90\x90\x90\x90\x90\x90", 6);
+    memcpy((void *)(kernbase + 0x397878), "\x90\x90\x90\x90\x90\x90", 6);
 
     // patch ptrace, thanks 2much4u
-    *(uint8_t *)(kernbase + 0x30D9AA) = 0xEB;
+    *(uint8_t *)(kernbase + 0x17C521) = 0xEB;
 
     // remove all these bullshit checks from ptrace, by golden
-    memcpy((void *)(kernbase + 0x30DE01), "\xE9\xD0\x00\x00\x00", 5);
+    memcpy((void *)(kernbase + 0x17C896), "\xE9\x15\x01\x00\x00", 5);
 
     // patch ASLR, thanks 2much4u
-    *(uint16_t *)(kernbase + 0x194875) = 0x9090;
+    *(uint16_t *)(kernbase + 0x1BC769) = 0x9090;
 
     // patch kmem_alloc
-    *(uint8_t *)(kernbase + 0xFCD48) = VM_PROT_ALL;
-    *(uint8_t *)(kernbase + 0xFCD56) = VM_PROT_ALL;
+    *(uint8_t *)(kernbase + 0x16DFEC) = VM_PROT_ALL;
+    *(uint8_t *)(kernbase + 0x16E002) = VM_PROT_ALL;
 
     cpu_enable_wp();
 }
