@@ -53,6 +53,7 @@ void patch_kernel() {
 
     // remove all these bullshit checks from ptrace, by golden
     memcpy((void *)(kernbase + 0x17C896), "\xE9\x15\x01\x00\x00", 5);
+    memcpy((void *)(kernbase + 0x17C9B3), "\x90\x90\x90", 3);
 
     // patch ASLR, thanks 2much4u
     *(uint16_t *)(kernbase + 0x1BC769) = 0x9090;
