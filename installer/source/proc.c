@@ -245,19 +245,19 @@ int proc_create_thread(struct proc *p, uint64_t address) {
         goto error;
     }
 
-    // offsets are for 5.05 libraries
+    // offsets are for 4.74 libraries
 
     // libkernel.sprx
-    // 0x12AA0 scePthreadCreate
-    // 0x84C20 thr_initial
+    // 0x115C0 scePthreadCreate
+    // 0x7CD20 thr_initial
 
     // libkernel_web.sprx
-    // 0x98C0 scePthreadCreate
-    // 0x84C20 thr_initial
+    // 0x115C0 scePthreadCreate
+    // 0x7CD20 thr_initial
 
     // libkernel_sys.sprx
-    // 0x135D0 scePthreadCreate
-    // 0x89030 thr_initial
+    // 0x120F0 scePthreadCreate
+    // 0x81230 thr_initial
 
     uint64_t _scePthreadAttrInit = 0, _scePthreadAttrSetstacksize = 0, _scePthreadCreate = 0, _thr_initial = 0;
     for (int i = 0; i < num_entries; i++) {
