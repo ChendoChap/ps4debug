@@ -27,39 +27,32 @@ void patch_kernel() {
     uint64_t kernbase = get_kbase();
 
     // patch memcpy first
-    *(uint8_t *)(kernbase + 0x1EA53D) = 0xEB;
+    *(uint8_t *)(kernbase + 0x2F04D) = 0xEB;
 
     // patch sceSblACMgrIsAllowedSystemLevelDebugging
-    memcpy((void *)(kernbase + 0x11730), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
+    memcpy((void *)(kernbase + 0x1CB880), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
 
     // patch sceSblACMgrHasMmapSelfCapability
-    memcpy((void *)(kernbase + 0x117B0), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
+    memcpy((void *)(kernbase + 0x1CB8F0), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
 
     // patch sceSblACMgrIsAllowedToMmapSelf
-    memcpy((void *)(kernbase + 0x117C0), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
-
-    // disable sysdump_perform_dump_on_fatal_trap
-    // will continue execution and give more information on crash, such as rip
-    *(uint8_t *)(kernbase + 0x7673E0) = 0xC3;
+    memcpy((void *)(kernbase + 0x1CB910), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8);
 
     // self patches
-    memcpy((void *)(kernbase + 0x13F03F), "\x31\xC0\x90\x90\x90", 5);
-
-    // patch vm_map_protect check
-    memcpy((void *)(kernbase + 0x1A3C08), "\x90\x90\x90\x90\x90\x90", 6);
+    memcpy((void *)(kernbase + 0x1D40BB), "\x31\xC0\x90\x90\x90", 5);
 
     // patch ptrace, thanks 2much4u
-    *(uint8_t *)(kernbase + 0x30D9AA) = 0xEB;
+    *(uint8_t *)(kernbase + 0x448D5) = 0xEB;
 
     // remove all these bullshit checks from ptrace, by golden
-    memcpy((void *)(kernbase + 0x30DE01), "\xE9\xD0\x00\x00\x00", 5);
+    memcpy((void *)(kernbase + 0x44DAF), "\xE9\x7C\x02\x00\x00", 5);
 
     // patch ASLR, thanks 2much4u
-    *(uint16_t *)(kernbase + 0x194875) = 0x9090;
+    *(uint8_t *)(kernbase + 0xC1F9A) = 0xEB;
 
     // patch kmem_alloc
-    *(uint8_t *)(kernbase + 0xFCD48) = VM_PROT_ALL;
-    *(uint8_t *)(kernbase + 0xFCD56) = VM_PROT_ALL;
+    *(uint8_t *)(kernbase + 0x1171BE) = VM_PROT_ALL;
+    *(uint8_t *)(kernbase + 0x1171C6) = VM_PROT_ALL;
 
     cpu_enable_wp();
 }

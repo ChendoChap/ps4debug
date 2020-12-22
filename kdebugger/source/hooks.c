@@ -354,38 +354,6 @@ int sys_console_cmd(struct thread *td, struct sys_console_cmd_args *uap) {
     return 0;
 }
 
-void hook_trap_fatal(struct trapframe *tf) {
-    // print registers
-    const char regnames[15][8] = { "rdi", "rsi", "rdx", "rcx", "r8", "r9", "rax", "rbx", "rbp", "r10", "r11", "r12", "r13", "r14", "r15" };
-    for(int i = 0; i < 15; i++) {
-        uint64_t rv = *(uint64_t *)((uint64_t)tf + (sizeof(uint64_t) * i));
-        printf("    %s %llX %i\n", regnames[i], rv, rv);
-    }
-    printf("    rip %llX %i\n", tf->tf_rip, tf->tf_rip);
-    printf("    rsp %llX %i\n", tf->tf_rsp, tf->tf_rsp);
-
-    uint64_t sp = 0;
-    if ((tf->tf_rsp & 3) == 3) {
-        sp = *(uint64_t *)(tf + 1);
-    } else {
-        sp = (uint64_t)(tf + 1);
-    }
-
-    // stack backtrace
-    uint64_t kernbase = get_kbase();
-    printf("kernelbase: 0x%llX\n", kernbase);
-    uint64_t backlog = 128;
-    printf("stack backtrace (0x%llX):\n", sp);
-    for (int i = 0; i < backlog; i++) {
-        uint64_t sv = *(uint64_t *)((sp - (backlog * sizeof(uint64_t))) + (i * sizeof(uint64_t)));
-        if (sv > kernbase) {
-            printf("    %i <kernbase>+0x%llX\n", i, sv - kernbase);
-        }
-    }
-
-    kern_reboot(4);
-}
-
 void install_syscall(uint32_t n, void *func) {
     struct sysent *p = &sysents[n];
     memset(p, NULL, sizeof(struct sysent));
@@ -396,11 +364,6 @@ void install_syscall(uint32_t n, void *func) {
 
 int install_hooks() {
     cpu_disable_wp();
-
-    // trap_fatal hook
-    uint64_t kernbase = get_kbase();
-    memcpy((void *)(kernbase + 0x1718D8), "\x4C\x89\xE7", 3); // mov rdi, r12
-    write_jmp(kernbase + 0x1718DB, (uint64_t)hook_trap_fatal);
 
     // proc
     install_syscall(107, sys_proc_list);
